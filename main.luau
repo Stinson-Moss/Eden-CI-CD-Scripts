@@ -6,9 +6,10 @@ local injectScripts = require('./inject-scripts')
 local cleanObjects = require('./clean-objects')
 local configurePlace = require('./config-place')
 
-local places = table.clone(process.args)
-local scriptInjectionsPath = table.remove(places, 1)
+local scriptInjectionsPath = process.args[1]
 local scriptInjections = fs.readFile(scriptInjectionsPath)
+local places = fs.readDir(process.args[2])
+
 local scriptInjectionsPlace = roblox.deserializePlace(scriptInjections)
 
 for _, placePath in places do
