@@ -1,6 +1,7 @@
 local process = require("@lune/process")
 local fs = require("@lune/fs")
 local roblox = require("@lune/roblox")
+local task = require("@lune/task")
 
 local injectScripts = require('./inject-scripts')
 local cleanObjects = require('./clean-objects')
