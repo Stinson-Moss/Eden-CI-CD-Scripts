@@ -1,10 +1,14 @@
+local roblox = require("@lune/roblox")
+
+local Enum = roblox.Enum
+
 return function(game, filePath)
-    local Players = game:GetService('Players')
-    local Workspace = game:GetService('Workspace')
-    local ServerScriptService = game:GetService('ServerScriptService')
-    local TextChatService = game:GetService('TextChatService')
-    local SoundService = game:GetService('SoundService')
-    local StarterPlayer = game:GetService('StarterPlayer')
+    local Players = game.Players
+    local Workspace = game.Workspace
+    local ServerScriptService = game.ServerScriptService
+    local TextChatService = game.TextChatService
+    local SoundService = game.SoundService
+    local StarterPlayer = game.StarterPlayer
 
     -- clear all scripts
     for _,v in game:GetDescendants() do
@@ -18,7 +22,7 @@ return function(game, filePath)
             v.Duration = 0
         end
     end
-
+    
     Workspace.FallenPartsDestroyHeight = -500
     Workspace.FallHeightEnabled = true
     Workspace.FluidForces = Enum.FluidForces.Default
@@ -28,7 +32,7 @@ return function(game, filePath)
     Workspace.StreamingEnabled = false
     Workspace.Gravity = 196.2
 
-    Players.UseStragingAnimations = false
+    Players.UseStrafingAnimations = false
     Players.CharacterAutoLoads = false
     Players.BanningEnabled = true
     Players.RespawnTime = 10

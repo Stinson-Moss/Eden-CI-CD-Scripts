@@ -12,8 +12,6 @@ local scriptInjectionsPath = process.args[1]
 local clientBuildPath = process.args[2]
 local places = fs.readDir(process.args[3])
 
-print (process.args)
-
 local clientBuild = fs.readFile(clientBuildPath)
 local scriptInjections = fs.readFile(scriptInjectionsPath)
 
@@ -21,16 +19,18 @@ local clientBuildPlace = roblox.deserializePlace(clientBuild)
 local scriptInjectionsPlace = roblox.deserializePlace(scriptInjections)
 
 cleanClient(clientBuildPlace)
+cleanObjects(clientBuildPlace)
 cleanObjects(scriptInjectionsPlace)
 
 local threads = #places
 local successes = 0
-for _, placePath in places do
+for _, placeName in places do
     task.spawn(function()
-        local placeFile = fs.readFile(placePath)
-        local place = roblox.deserializePlace(placeFile)
+        local success, err = pcall(function()
+            local placePath = process.args[3] .. "/" .. placeName
+            local placeFile = fs.readFile(placePath)
+            local place = roblox.deserializePlace(placeFile)
 
-        local success = pcall(function()
             configurePlace(place)
             injectObjects(scriptInjectionsPlace, place)
             injectObjects(clientBuildPlace, place)
@@ -40,15 +40,22 @@ for _, placePath in places do
 
         if success then
             successes += 1
+        else
+            warn(err)
         end
 
         threads -= 1
     end)
 end
 
+local startTime = os.clock()
 while threads > 0 do
     task.wait(1)
 end
+
+local endTime = os.clock()
+
+print(`Time taken: {endTime - startTime} seconds`)
 
 assert(successes == #places, "Not all places were processed successfully")
 print(`Processed {#places} place files successfully`)
