@@ -3,15 +3,23 @@ local fs = require("@lune/fs")
 local roblox = require("@lune/roblox")
 local task = require("@lune/task")
 
-local injectScripts = require('./inject-scripts')
+local injectObjects = require('./inject-objects')
 local cleanObjects = require('./clean-objects')
 local configurePlace = require('./config-place')
+local cleanClient = require('./clean-client')
 
 local scriptInjectionsPath = process.args[1]
-local scriptInjections = fs.readFile(scriptInjectionsPath)
-local places = fs.readDir(process.args[2])
+local clientBuildPath = process.args[2]
 
+local clientBuild = fs.readFile(clientBuildPath)
+local scriptInjections = fs.readFile(scriptInjectionsPath)
+local places = fs.readDir(process.args[3])
+
+local clientBuildPlace = roblox.deserializePlace(clientBuild)
 local scriptInjectionsPlace = roblox.deserializePlace(scriptInjections)
+
+cleanClient(clientBuildPlace)
+cleanObjects(scriptInjectionsPlace)
 
 for _, placePath in places do
     task.spawn(function()
@@ -19,8 +27,8 @@ for _, placePath in places do
         local place = roblox.deserializePlace(placeFile)
 
         configurePlace(place)
-        cleanObjects(scriptInjectionsPlace)
-        injectScripts(scriptInjectionsPlace, place)
+        injectObjects(scriptInjectionsPlace, place)
+        injectObjects(clientBuildPlace, place)
 
         fs.writeFile(placePath, roblox.serializePlace(place))
     end)
