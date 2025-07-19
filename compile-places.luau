@@ -3,10 +3,10 @@ local fs = require("@lune/fs")
 local roblox = require("@lune/roblox")
 local task = require("@lune/task")
 
-local injectObjects = require('./inject-objects')
-local cleanObjects = require('./clean-objects')
-local configurePlace = require('./config-place')
-local cleanClient = require('./clean-client')
+local injectObjects = require('scripts/inject-objects')
+local cleanObjects = require('scripts/clean-objects')
+local configurePlace = require('scripts/config-place')
+local cleanClient = require('scripts/clean-client')
 
 local scriptInjectionsPath = process.args[1]
 local clientBuildPath = process.args[2]
@@ -56,6 +56,5 @@ end
 local endTime = os.clock()
 
 print(`Time taken: {endTime - startTime} seconds`)
-
 assert(successes == #places, "Not all places were processed successfully")
 print(`Processed {#places} place files successfully`)
