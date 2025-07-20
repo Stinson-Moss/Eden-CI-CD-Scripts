@@ -13,7 +13,7 @@ local mainClientFolder = roblox.Instance.new('Folder')
 mainClientFolder.Name = "Client"
 mainClientFolder.Parent = replicatedStorage
 
-local size = 1
+local size = 0
 local clients = {}
 
 for _, system in fs.readDir("Systems") do
@@ -32,16 +32,30 @@ local errors = {}
 
 for system, client in clients do
     task.spawn(function()
-        local clientFile = fs.readFile(client)
-        local place = roblox.deserializePlace(clientFile)
-        local localReplicatedStorage = place:GetService('ReplicatedStorage')
-        local clientFolder = localReplicatedStorage:FindFirstChild('Client')
-        local systemFolder = clientFolder and clientFolder:FindFirstChild(system)
+        local success, errorMessage = pcall(function()
+            print(`Building {system} client...`)
+            print(`{system:upper()} | Client: {client}`)
+            local clientFile = fs.readFile(client)
+            print(`{system:upper()} | Client File: {clientFile}`)
+            local place = roblox.deserializePlace(clientFile)
 
-        if systemFolder then
-            systemFolder:Clone().Parent = mainClientFolder
-        else
-            table.insert(errors, `ERROR: System folder does not exist in assets build for {system} system`)
+            print(`{system:upper()} | Place: {place}`)
+            local localReplicatedStorage = place:GetService('ReplicatedStorage')
+            local clientFolder = localReplicatedStorage:FindFirstChild('Client')
+            print(`{system:upper()} | Client Folder: {clientFolder}`)
+            local systemFolder = clientFolder and clientFolder:FindFirstChild(system)
+
+            if systemFolder then
+                systemFolder:Clone().Parent = mainClientFolder
+            else
+                error(`System folder does not exist in assets build for {system} system`)
+            end
+
+            print(`{system:upper()} | Cloned {system} client successfully`)
+        end)
+
+        if not success then
+            table.insert(errors, `ERROR: {system} client build failed: {errorMessage}`)
         end
 
         threads -= 1
