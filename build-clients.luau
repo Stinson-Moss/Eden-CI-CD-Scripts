@@ -17,7 +17,7 @@ local size = 1
 local clients = {}
 
 for _, system in fs.readDir("Systems") do
-    for _, file in fs.readDir(system) do
+    for _, file in fs.readDir(`Systems/{system}`) do
         if fs.isFile(`Systems/{system}/{file}`) then
             if file == "Client.rbxlx" then
                 clients[system] = `Systems/{system}/{file}`
