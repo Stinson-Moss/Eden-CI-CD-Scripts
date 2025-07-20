@@ -40,15 +40,25 @@ for system, client in clients do
             local place = roblox.deserializePlace(clientFile)
             local localReplicatedStorage = place:GetService('ReplicatedStorage')
             local clientFolder = localReplicatedStorage:FindFirstChild('Client')
-            local systemFolder = clientFolder and clientFolder:FindFirstChild(system)
+
+            local systemFolder = nil; do
+                if clientFolder then
+                    for _, folder in clientFolder:GetChildren() do
+                        if folder.Name:lower() == system:lower() then
+                            systemFolder = folder
+                            break
+                        end
+                    end
+                end
+            end
 
             if systemFolder then
                 systemFolder:Clone().Parent = mainClientFolder
+                print(`{system:upper()} | Cloned {system} client successfully`)
             else
-                error(`System folder does not exist in assets build for {system} system`)
+                error(`Assets folder does not exist in client build for {system} system`)
             end
 
-            print(`{system:upper()} | Cloned {system} client successfully`)
         end)
 
         if not success then
