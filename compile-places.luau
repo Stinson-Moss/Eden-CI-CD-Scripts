@@ -3,10 +3,10 @@ local fs = require("@lune/fs")
 local roblox = require("@lune/roblox")
 local task = require("@lune/task")
 
-local injectObjects = require('scripts/inject-objects')
-local cleanObjects = require('scripts/clean-objects')
-local configurePlace = require('scripts/config-place')
-local cleanClient = require('scripts/clean-client')
+local injectObjects = require('./scripts/inject-objects')
+local cleanObjects = require('./scripts/clean-objects')
+local configurePlace = require('./scripts/config-place')
+local cleanClient = require('./scripts/clean-client')
 
 local scriptInjectionsPath = process.args[1]
 local clientBuildPath = process.args[2]
