@@ -32,7 +32,8 @@ local errors = {}
 
 for system, client in clients do
     task.spawn(function()
-        local place = roblox.deserializePlace(client)
+        local clientFile = fs.readFile(client)
+        local place = roblox.deserializePlace(clientFile)
         local localReplicatedStorage = place:GetService('ReplicatedStorage')
         local clientFolder = localReplicatedStorage:FindFirstChild('Client')
         local systemFolder = clientFolder and clientFolder:FindFirstChild(system)
