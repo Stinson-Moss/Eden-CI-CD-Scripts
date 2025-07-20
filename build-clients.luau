@@ -36,13 +36,9 @@ for system, client in clients do
             print(`Building {system} client...`)
             print(`{system:upper()} | Client: {client}`)
             local clientFile = fs.readFile(client)
-            print(`{system:upper()} | Client File: {clientFile}`)
             local place = roblox.deserializePlace(clientFile)
-
-            print(`{system:upper()} | Place: {place}`)
             local localReplicatedStorage = place:GetService('ReplicatedStorage')
             local clientFolder = localReplicatedStorage:FindFirstChild('Client')
-            print(`{system:upper()} | Client Folder: {clientFolder}`)
             local systemFolder = clientFolder and clientFolder:FindFirstChild(system)
 
             if systemFolder then
