@@ -13,6 +13,7 @@ local mainClientFolder = roblox.Instance.new('Folder')
 mainClientFolder.Name = "Client"
 mainClientFolder.Parent = replicatedStorage
 
+local useXML = true
 local size = 0
 local clients = {}
 
@@ -68,7 +69,7 @@ local corePlace = roblox.deserializePlace(coreFile)
 
 corePlace.ServerStorage.Tools:Clone().Parent = serverStorage
 
-for _, folder in corePlace.Client do
+for _, folder in corePlace.ReplicatedStorage.Client:GetChildren() do
     folder:Clone().Parent = mainClientFolder
 end
 
@@ -77,7 +78,7 @@ if #errors > 0 then
 end
 
 local output = process.args[1]
-local serialized = roblox.serializePlace(mainDataModel, true)
+local serialized = roblox.serializePlace(mainDataModel, useXML)
 
 fs.writeFile(output, serialized)
 print ("Built Client.rbxlx successfully")
